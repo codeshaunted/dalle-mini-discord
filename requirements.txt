@@ -1,0 +1,4 @@
+git+https://github.com/Rapptz/discord.py@334ef1d
+Pillow==9.1.1
+aiohttp==3.8.1
+numpy==1.22.3

@@ -1,0 +1,6 @@
+{
+	"BOT_TOKEN": "",
+	"DALLE_MINI_BACKEND_URL": "https://bf.dallemini.ai/generate",
+	"COLLAGE_FORMAT": "PNG",
+	"IMAGE_SELECT_TIMEOUT": 10800
+}
