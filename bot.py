@@ -19,6 +19,9 @@ class DALLEMini(discord.Client):
     async def setup_hook(self):
         await self.tree.sync()
 
+    async def update_status(self):
+        await self.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{len(self.guilds)} servers | /generate'))
+
 
 intents = discord.Intents.default()
 client = DALLEMini(intents=intents)
@@ -85,7 +88,13 @@ async def make_collage(images: list[io.BytesIO], wrap: int) -> io.BytesIO:
 
 @client.event
 async def on_ready():
-    logging.info(f'Logged in as {client.user} (ID: {client.user.id}')
+    logging.info(f'Logged in as {client.user} (ID: {client.user.id})')
+    await client.update_status()
+
+
+@client.event
+async def on_guild_join(guild: discord.Guild):
+    await client.update_status()
 
 
 @client.tree.command()
