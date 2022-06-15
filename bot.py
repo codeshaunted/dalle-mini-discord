@@ -97,6 +97,17 @@ async def on_guild_join(guild: discord.Guild):
     await client.update_status()
 
 
+@client.event
+async def on_guild_remove(guild: discord.Guild):
+    await client.update_status()
+
+
+@client.tree.command()
+async def invite(interaction: discord.Interaction):
+    '''Gives you a bot invite link to share.'''
+    await interaction.response.send_message(f'https://discord.com/api/oauth2/authorize?client_id={client.user.id}&permissions=0&scope=applications.commands%20bot')
+
+
 @client.tree.command()
 async def generate(interaction: discord.Interaction, prompt: str):
     '''Generates images based on prompt given.'''
@@ -118,8 +129,7 @@ async def generate(interaction: discord.Interaction, prompt: str):
     await interaction.followup.send(f'`{prompt}`', file=collage, view=ImageSelectView(collage, images, timeout=config['IMAGE_SELECT_TIMEOUT']))
 
 if __name__ == '__main__':
-    logging.basicConfig(filename='dalle-mini-discord.log',
-                        encoding='utf-8', level=logging.INFO)
+    logging.basicConfig(encoding='utf-8', level=logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler())
     with open('config.json', 'r') as file:
         config = json.load(file)
