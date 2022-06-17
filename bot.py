@@ -3,6 +3,7 @@ import base64
 import io
 import json
 import logging
+import os
 
 from discord import app_commands
 from PIL import Image
@@ -10,6 +11,12 @@ import aiohttp
 import discord
 import numpy
 
+CONFIG_DICT = {
+    "BOT_TOKEN": "",
+    "DALLE_MINI_BACKEND_URL": "https://bf.dallemini.ai/generate",
+    "COLLAGE_FORMAT": "PNG",
+    "IMAGE_SELECT_TIMEOUT": 10800
+}
 
 class DALLEMini(discord.Client):
     def __init__(self, *, intents: discord.Intents):
@@ -128,9 +135,36 @@ async def generate(interaction: discord.Interaction, prompt: str):
     images = [discord.File(images[i], filename=f'{i}.jpg') for i in range(len(images))]
     await interaction.followup.send(f'`{prompt}`', file=collage, view=ImageSelectView(collage, images, timeout=config['IMAGE_SELECT_TIMEOUT']))
 
+def get_config(path):
+    """
+    get_config()
+    Parameters: 
+        - path: full filepath to a .json file that contains config keys and values
+    Returns:
+        - json.load object of config file 
+        or
+        - dictionary 
+
+    Function tries to load a .json file for app config, if no file exists it then tries to use system environment variables and returns dictionary of keys,values for settings. 
+    """
+    try:
+        with open(path, 'r') as file:
+            config = json.load(file)
+        return config
+    # If a .json file doesn't exist for settings, use sytem environment variables
+    except FileNotFoundError:
+        print(f"Warning no config file found at: {path}, attempting to use environment variables.")
+        config = {}
+        # Iterate through keys in CONFIG_DICT and set using os.getenv
+        # Defaults are provided from CONFIG_DICT
+        for setting in CONFIG_DICT.keys():
+            config[setting] = os.getenv(setting.upper(), default = CONFIG_DICT[setting])
+            print(f"{setting}: {config[setting]}")
+        return config
+
+
 if __name__ == '__main__':
     logging.basicConfig(encoding='utf-8', level=logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler())
-    with open('config.json', 'r') as file:
-        config = json.load(file)
-        client.run(config['BOT_TOKEN'])
+    config = get_config('config.json')
+    client.run(config['BOT_TOKEN'])

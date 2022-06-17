@@ -17,3 +17,23 @@ To run dalle-mini-discord, just run the bot.py file in your Python 3.9+ interpre
 ```
 python bot.py
 ```
+## Docker 
+You can run this project in a docker container by building it first.
+`BOT_TOKEN` is required to run the project
+Other values will use defaults found in `config.json`
+`cd` into the project directory and build:
+```bash
+docker build -t dalle-mini-discord .
+```
+Then you can run the container with `docker run`
+`--network host` allows the container to use the hosts networking namespace  
+
+```bash
+docker run \
+    -e BOT_TOKEN=bot_token_goes_here \
+    -e DALLE_MINI_BACKEND_URL=192.168.0.1:8080 \
+    -e COLLAGE_FORMAT=PNG \
+    -e IMAGE_SELECT_TIMEOUT=10800 \
+    --network host \
+    dalle-mini-discord
+```
