@@ -135,7 +135,7 @@ async def generate(interaction: discord.Interaction, prompt: str):
     images = [discord.File(images[i], filename=f'{i}.jpg') for i in range(len(images))]
     await interaction.followup.send(f'`{prompt}`', file=collage, view=ImageSelectView(collage, images, timeout=config['IMAGE_SELECT_TIMEOUT']))
 
-def get_config(path):
+def get_config(path: str):
     """
     get_config()
     Parameters: 
