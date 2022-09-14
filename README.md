@@ -1,5 +1,5 @@
 # dalle-mini-discord
-A simple Discord bot written in Python designed around the [DALL-E Mini](https://github.com/borisdayma/dalle-mini) model.
+A simple Discord bot written in Python designed around the [DALL-E Mini](https://github.com/borisdayma/dalle-mini) backend API.
 # Commands
 dalle-mini-discord only has one command, `/generate prompt:{prompt}`, which will generate an array of images using the specified DALL-E Mini backend URL.
 # Installation
